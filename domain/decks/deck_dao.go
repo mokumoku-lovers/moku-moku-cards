@@ -12,9 +12,8 @@ import (
 func (deck *Deck) Get() *errors.RestErr {
 	err := mongo_db.DB.Collection("decks").FindOne(context.TODO(), bson.D{{"ID", deck.ID}}).Decode(&deck)
 	if err != nil {
-		// ErrNoDocuments means that the filter did not match any documents in the collection
 		if err == mongo.ErrNoDocuments {
-			return nil
+			return errors.NotFoundError("deck not found")
 		}
 		log.Fatal(err)
 	}
