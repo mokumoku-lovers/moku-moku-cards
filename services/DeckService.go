@@ -1,12 +1,12 @@
 package services
 
 import (
-	"moku-moku-cards/domain/cards"
+	"moku-moku-cards/domain/decks"
 	"moku-moku-cards/utils/errors"
 )
 
-func GetCard(cardID int64) (*cards.Card, *errors.RestErr) {
-	result := &cards.Card{ID: cardID}
+func GetDeck(deckID int64) (*decks.Deck, *errors.RestErr) {
+	result := &decks.Deck{ID: deckID}
 	if err := result.Get(); err != nil {
 		return nil, err
 	}
