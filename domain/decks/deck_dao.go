@@ -3,6 +3,7 @@ package decks
 import (
 	"context"
 	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 	"log"
 	"moku-moku-cards/datasources/mongo_db"
@@ -18,4 +19,12 @@ func (deck *Deck) Get() *errors.RestErr {
 		log.Fatal(err)
 	}
 	return nil
+}
+
+func (deck *Deck) Save() (string, *errors.RestErr) {
+	res, err := mongo_db.DB.Collection("decks").InsertOne(context.TODO(), deck)
+	if err != nil {
+		return primitive.NilObjectID.String(), errors.NotFoundError("failed writing document")
+	}
+	return res.InsertedID.(primitive.ObjectID).Hex(), nil
 }
