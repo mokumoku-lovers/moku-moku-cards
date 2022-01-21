@@ -1,6 +1,7 @@
 package decks
 
 import (
+	"moku-moku-cards/domain/decks"
 	"moku-moku-cards/services"
 	"moku-moku-cards/utils/errors"
 	"net/http"
@@ -22,4 +23,20 @@ func GetDeck(c *gin.Context) {
 		return
 	}
 	c.JSON(http.StatusOK, deck)
+}
+
+func CreateDeck(c *gin.Context) {
+	var deck decks.Deck
+	if err := c.ShouldBindJSON(&deck); err != nil {
+		restErr := errors.BadRequest("invalid json body")
+		c.JSON(restErr.Status, restErr)
+		return
+	}
+
+	result, saveErr := services.CreateDeck(deck)
+	if saveErr != nil {
+		c.JSON(saveErr.Status, saveErr)
+		return
+	}
+	c.JSON(http.StatusCreated, result)
 }
