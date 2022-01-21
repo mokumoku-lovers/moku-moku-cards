@@ -12,3 +12,12 @@ func GetDeck(deckID int64) (*decks.Deck, *errors.RestErr) {
 	}
 	return result, nil
 }
+
+func CreateDeck(deck decks.Deck) (string, *errors.RestErr) {
+	// May need validation here.
+	res, err := deck.Save()
+	if err != nil {
+		return "", err
+	}
+	return res, nil
+}
