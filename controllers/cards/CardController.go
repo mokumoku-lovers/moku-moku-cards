@@ -37,6 +37,8 @@ func PostCard(c *gin.Context) {
 		return
 	}
 
+	// TODO: Save the image and set newCard.Image
+
 	// Create card
 	err := services.PostCard(newCard)
 	if err != nil {

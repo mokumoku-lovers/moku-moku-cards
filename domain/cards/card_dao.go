@@ -34,5 +34,7 @@ func (card *Card) Post() *errors.RestErr {
 		return errors.InternalServerError(err.Error())
 	}
 
+	// TODO: Get inserted card generated ID
+
 	return nil
 }
