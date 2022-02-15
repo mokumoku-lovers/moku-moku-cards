@@ -16,10 +16,12 @@ func GetDeck(c *gin.Context) {
 		c.JSON(err.Status, err)
 		return
 	}
-	deck, getErr := services.GetDeck(deckID)
+//get all decks in db
+func GetDecks(c *gin.Context) {
+	decks, getErr := services.GetDecks()
 	if getErr != nil {
 		c.JSON(getErr.Status, getErr)
 		return
 	}
-	c.JSON(http.StatusOK, deck)
+	c.JSON(http.StatusOK, decks)
 }

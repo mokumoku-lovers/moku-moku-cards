@@ -12,3 +12,11 @@ func GetDeck(deckID int64) (*decks.Deck, *errors.RestErr) {
 	}
 	return result, nil
 }
+
+func GetDecks() ([]decks.Deck, *errors.RestErr) {
+	result, err := decks.GetAll()
+	if err != nil {
+		return nil, err
+	}
+	return result, nil
+}
