@@ -21,3 +21,20 @@ func (card *Card) Get() *errors.RestErr {
 	}
 	return nil
 }
+
+// Post stores the newly create card to the DB
+func (card *Card) Post() *errors.RestErr {
+	_, err := mongo_db.DB.Collection("cards").InsertOne(
+		context.Background(),
+		card,
+	)
+
+	if err != nil {
+		log.Fatal(err)
+		return errors.InternalServerError(err.Error())
+	}
+
+	// TODO: Get inserted card generated ID
+
+	return nil
+}

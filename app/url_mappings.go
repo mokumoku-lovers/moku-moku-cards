@@ -13,7 +13,7 @@ func mapUrls() {
 	router.PATCH("/deck/:deckID", nil)
 
 	router.GET("/card/:cardID", cards.GetCard)
-	router.POST("/card", nil)
+	router.POST("/card", cards.PostCard)
 	router.DELETE("/card/:cardID", nil)
 	router.PATCH("/card/:cardID", nil)
 }
