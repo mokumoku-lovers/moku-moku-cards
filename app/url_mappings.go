@@ -6,7 +6,7 @@ import (
 )
 
 func mapUrls() {
-	router.GET("/decks", nil)
+	router.GET("/decks", decks.GetDecks)
 	router.GET("/deck/:deckID", decks.GetDeck)
 	router.POST("/deck", nil)
 	router.DELETE("/deck/:deckID", nil)
