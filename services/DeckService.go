@@ -18,17 +18,28 @@ func GetDeck(deckID string) (*decks.Deck, *errors.RestErr) {
 	return result, nil
 }
 
-
-func DeleteDeck(deckID int64) (*decks.Deck, *errors.RestErr) {
-	result := &decks.Deck{ID: deckID}
+func DeleteDeck(deckID string) (*decks.Deck, *errors.RestErr) {
+	objectID, err := primitive.ObjectIDFromHex(deckID)
+	if err != nil {
+		return nil, errors.NotFoundError("Invalid ID")
+	}
+	result := &decks.Deck{ID: objectID}
 	if err := result.Delete(); err != nil {
-    		return nil, err
+		return nil, err
 	}
 	return result, nil
 }
 
 func GetDecks() ([]decks.Deck, *errors.RestErr) {
 	result, err := decks.GetAll()
+	if err != nil {
+		return nil, err
+	}
+	return result, nil
+}
+
+func GetUserDecks(userID int64) ([]decks.Deck, *errors.RestErr) {
+	result, err := decks.GetAllUserDecks(userID)
 	if err != nil {
 		return nil, err
 	}
@@ -54,4 +65,6 @@ func UpdateDeck(deckID string, deck decks.Deck) (int64, *errors.RestErr) {
 	result, updateErr := deck.Update()
 	if updateErr != nil {
 		return 0, updateErr
+	}
+	return result, nil
 }
