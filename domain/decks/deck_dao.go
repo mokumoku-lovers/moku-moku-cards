@@ -7,6 +7,7 @@ import (
 	"go.mongodb.org/mongo-driver/mongo"
 	"log"
 	"moku-moku-cards/datasources/mongo_db"
+	"moku-moku-cards/utils/docs"
 	"moku-moku-cards/utils/errors"
 )
 
@@ -27,4 +28,19 @@ func (deck *Deck) Save() (primitive.ObjectID, *errors.RestErr) {
 		return primitive.NilObjectID, errors.NotFoundError("failed writing document")
 	}
 	return res.InsertedID.(primitive.ObjectID), nil
+}
+
+func (deck *Deck) Update() (int64, *errors.RestErr) {
+	updateDoc, docErr := docs.InterfaceToDoc(deck)
+	if docErr != nil {
+		return 0, errors.BadRequest("invalid Doc")
+	}
+	result, err := mongo_db.DB.Collection("decks").UpdateOne(context.TODO(), bson.M{"_id": deck.ID},
+		bson.D{
+			{"$set", updateDoc},
+		})
+	if err != nil {
+		return 0, errors.NotFoundError("failed updating document")
+	}
+	return result.ModifiedCount, nil
 }

@@ -27,3 +27,16 @@ func CreateDeck(deck decks.Deck) (primitive.ObjectID, *errors.RestErr) {
 	}
 	return res, nil
 }
+
+func UpdateDeck(deckID string, deck decks.Deck) (int64, *errors.RestErr) {
+	objectID, idErr := primitive.ObjectIDFromHex(deckID)
+	if idErr != nil {
+		return 0, errors.BadRequest("Invalid ID")
+	}
+	deck.ID = objectID
+	result, updateErr := deck.Update()
+	if updateErr != nil {
+		return 0, updateErr
+	}
+	return result, nil
+}
