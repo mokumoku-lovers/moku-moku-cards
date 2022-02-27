@@ -1,6 +1,7 @@
 package services
 
 import (
+	"go.mongodb.org/mongo-driver/bson/primitive"
 	"moku-moku-cards/domain/decks"
 	"moku-moku-cards/utils/errors"
 )
@@ -17,11 +18,12 @@ func GetDeck(deckID string) (*decks.Deck, *errors.RestErr) {
 	return result, nil
 }
 
-func CreateDeck(deck decks.Deck) (string, *errors.RestErr) {
+func CreateDeck(deck decks.Deck) (primitive.ObjectID, *errors.RestErr) {
 	// May need validation here.
+	deck.ID = primitive.NewObjectID()
 	res, err := deck.Save()
 	if err != nil {
-		return "", err
+		return primitive.NilObjectID, err
 	}
 	return res, nil
 }
