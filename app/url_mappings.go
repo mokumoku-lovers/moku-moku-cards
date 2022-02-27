@@ -9,7 +9,7 @@ func mapUrls() {
 	router.GET("/decks", nil)
 	router.GET("/deck/:deckID", decks.GetDeck)
 	router.POST("/deck", nil)
-	router.DELETE("/deck/:deckID", nil)
+	router.DELETE("/deck/:deckID", decks.DeleteDeck)
 	router.PATCH("/deck/:deckID", nil)
 
 	router.GET("/card/:cardID", cards.GetCard)
