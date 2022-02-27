@@ -11,7 +11,7 @@ import (
 )
 
 func (deck *Deck) Get() *errors.RestErr {
-	err := mongo_db.DB.Collection("decks").FindOne(context.TODO(), bson.D{{"ID", deck.ID}}).Decode(&deck)
+	err := mongo_db.DB.Collection("decks").FindOne(context.TODO(), bson.D{{"_id", deck.ID}}).Decode(&deck)
 	if err != nil {
 		if err == mongo.ErrNoDocuments {
 			return errors.NotFoundError("deck not found")
@@ -21,10 +21,10 @@ func (deck *Deck) Get() *errors.RestErr {
 	return nil
 }
 
-func (deck *Deck) Save() (string, *errors.RestErr) {
+func (deck *Deck) Save() (primitive.ObjectID, *errors.RestErr) {
 	res, err := mongo_db.DB.Collection("decks").InsertOne(context.TODO(), deck)
 	if err != nil {
-		return primitive.NilObjectID.String(), errors.NotFoundError("failed writing document")
+		return primitive.NilObjectID, errors.NotFoundError("failed writing document")
 	}
-	return res.InsertedID.(primitive.ObjectID).Hex(), nil
+	return res.InsertedID.(primitive.ObjectID), nil
 }
