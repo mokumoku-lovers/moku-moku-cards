@@ -19,6 +19,17 @@ func GetDeck(c *gin.Context) {
 	c.JSON(http.StatusOK, deck)
 }
 
+func DeleteDeck(c *gin.Context) {
+	deckID := c.Param("deckID")
+
+	_, deleteErr := services.DeleteDeck(deckID)
+	if deleteErr != nil {
+		c.JSON(deleteErr.Status, deleteErr)
+		return
+	}
+	c.JSON(http.StatusOK, "deck deleted")
+}
+
 func CreateDeck(c *gin.Context) {
 	var deck decks.Deck
 	if err := c.ShouldBindJSON(&deck); err != nil {
