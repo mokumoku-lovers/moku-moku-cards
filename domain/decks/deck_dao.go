@@ -2,13 +2,13 @@ package decks
 
 import (
 	"context"
-	"go.mongodb.org/mongo-driver/bson"
-	"go.mongodb.org/mongo-driver/bson/primitive"
-	"go.mongodb.org/mongo-driver/mongo"
 	"log"
 	"moku-moku-cards/datasources/mongo_db"
 	"moku-moku-cards/utils/docs"
 	"moku-moku-cards/utils/errors"
+	"go.mongodb.org/mongo-driver/bson"
+  "go.mongodb.org/mongo-driver/bson/primitive"
+	"go.mongodb.org/mongo-driver/mongo"
 )
 
 func (deck *Deck) Get() *errors.RestErr {
@@ -20,6 +20,22 @@ func (deck *Deck) Get() *errors.RestErr {
 		log.Fatal(err)
 	}
 	return nil
+}
+
+func GetAll() ([]Deck, *errors.RestErr) {
+	result, err := mongo_db.DB.Collection("decks").Find(context.TODO(), bson.M{})
+	if err != nil {
+		if err == mongo.ErrNoDocuments {
+			return nil, errors.NotFoundError("no decks found")
+		}
+		log.Fatal(err)
+	}
+	var res []Deck
+	//TODO: error- cannot decode string into an int, fix deck id
+	if err = result.All(context.TODO(), &res); err != nil {
+		log.Fatal(err)
+	}
+	return res, nil
 }
 
 func (deck *Deck) Save() (primitive.ObjectID, *errors.RestErr) {

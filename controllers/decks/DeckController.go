@@ -4,7 +4,6 @@ import (
 	"github.com/gin-gonic/gin"
 	"moku-moku-cards/domain/decks"
 	"moku-moku-cards/services"
-	"moku-moku-cards/utils/errors"
 	"net/http"
 )
 
@@ -48,4 +47,14 @@ func UpdateDeck(c *gin.Context) {
 		return
 	}
 	c.JSON(http.StatusOK, result)
+}
+
+//get all decks in db
+func GetDecks(c *gin.Context) {
+	decks, getErr := services.GetDecks()
+	if getErr != nil {
+		c.JSON(getErr.Status, getErr)
+		return
+	}
+	c.JSON(http.StatusOK, decks)
 }

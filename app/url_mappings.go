@@ -6,14 +6,14 @@ import (
 )
 
 func mapUrls() {
-	router.GET("/decks", nil)
+	router.GET("/decks", decks.GetDecks)
 	router.GET("/deck/:deckID", decks.GetDeck)
 	router.POST("/deck", decks.CreateDeck)
 	router.DELETE("/deck/:deckID", nil)
 	router.PUT("/deck/:deckID", decks.UpdateDeck)
 
 	router.GET("/card/:cardID", cards.GetCard)
-	router.POST("/card", nil)
+	router.POST("/card", cards.PostCard)
 	router.DELETE("/card/:cardID", nil)
 	router.PATCH("/card/:cardID", nil)
 }

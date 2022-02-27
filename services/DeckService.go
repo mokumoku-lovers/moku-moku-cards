@@ -18,6 +18,14 @@ func GetDeck(deckID string) (*decks.Deck, *errors.RestErr) {
 	return result, nil
 }
 
+func GetDecks() ([]decks.Deck, *errors.RestErr) {
+	result, err := decks.GetAll()
+	if err != nil {
+		return nil, err
+	}
+	return result, nil
+}
+
 func CreateDeck(deck decks.Deck) (primitive.ObjectID, *errors.RestErr) {
 	// May need validation here.
 	deck.ID = primitive.NewObjectID()
@@ -37,6 +45,4 @@ func UpdateDeck(deckID string, deck decks.Deck) (int64, *errors.RestErr) {
 	result, updateErr := deck.Update()
 	if updateErr != nil {
 		return 0, updateErr
-	}
-	return result, nil
 }
