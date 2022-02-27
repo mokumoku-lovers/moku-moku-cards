@@ -23,3 +23,20 @@ func GetDeck(c *gin.Context) {
 	}
 	c.JSON(http.StatusOK, deck)
 }
+
+func DeleteDeck(c *gin.Context) {
+	deckID, deckErr := strconv.ParseInt(c.Param("deckID"), 10, 64)
+
+	if deckErr != nil {
+		err := errors.BadRequest("deck id should be a number")
+		c.JSON(err.Status, err)
+		return
+	}
+
+	_, deleteErr := services.DeleteDeck(deckID)
+	if deleteErr != nil {
+		c.JSON(deleteErr.Status, deleteErr)
+		return
+	}
+	c.JSON(http.StatusOK, "deck deleted")
+}

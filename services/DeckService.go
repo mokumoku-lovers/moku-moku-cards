@@ -12,3 +12,11 @@ func GetDeck(deckID int64) (*decks.Deck, *errors.RestErr) {
 	}
 	return result, nil
 }
+
+func DeleteDeck(deckID int64) (*decks.Deck, *errors.RestErr) {
+	result := &decks.Deck{ID: deckID}
+	if err := result.Delete(); err != nil {
+		return nil, err
+	}
+	return result, nil
+}
