@@ -1,9 +1,11 @@
 package decks
 
+import "go.mongodb.org/mongo-driver/bson/primitive"
+
 type Deck struct {
-	ID      string  `json:"id" bson:"_id"`
-	Name    string  `json:"name"`
-	Cards   []int64 `json:"cards"`
-	Creator int64   `json:"creator"`
-	Date    string  `json:"date"`
+	ID      primitive.ObjectID `json:"id" bson:"_id"`
+	Name    string             `json:"name"`
+	Cards   []int64            `json:"cards"`
+	Creator int64              `json:"creator"`
+	Date    string             `json:"date"`
 }
