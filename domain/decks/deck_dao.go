@@ -38,7 +38,7 @@ func GetAll() ([]Deck, *errors.RestErr) {
 }
 
 // GetAllUserDecks retrieves a user's decks from the DB
-func GetAllUserDecks(userID string) ([]Deck, *errors.RestErr) {
+func GetAllUserDecks(userID int64) ([]Deck, *errors.RestErr) {
 	result, err := mongo_db.DB.Collection("decks").Find(context.TODO(), bson.M{"creator": userID})
 	if err != nil {
 		if err == mongo.ErrNoDocuments {

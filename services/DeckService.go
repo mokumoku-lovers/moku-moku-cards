@@ -21,7 +21,7 @@ func GetDecks() ([]decks.Deck, *errors.RestErr) {
 	return result, nil
 }
 
-func GetUserDecks(userID string) ([]decks.Deck, *errors.RestErr) {
+func GetUserDecks(userID int64) ([]decks.Deck, *errors.RestErr) {
 	result, err := decks.GetAllUserDecks(userID)
 	if err != nil {
 		return nil, err
