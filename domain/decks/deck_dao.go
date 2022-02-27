@@ -2,11 +2,12 @@ package decks
 
 import (
 	"context"
-	"go.mongodb.org/mongo-driver/bson"
-	"go.mongodb.org/mongo-driver/mongo"
 	"log"
 	"moku-moku-cards/datasources/mongo_db"
 	"moku-moku-cards/utils/errors"
+
+	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/mongo"
 )
 
 func (deck *Deck) Get() *errors.RestErr {
@@ -16,6 +17,17 @@ func (deck *Deck) Get() *errors.RestErr {
 			return errors.NotFoundError("deck not found")
 		}
 		log.Fatal(err)
+	}
+	return nil
+}
+
+func (deck *Deck) Delete() *errors.RestErr {
+	result, err := mongo_db.DB.Collection("decks").DeleteOne(context.TODO(), bson.D{{"ID", deck.ID}})
+	if result.DeletedCount == 0 {
+		return errors.NotFoundError("deck not found")
+	}
+	if err != nil {
+		panic(err)
 	}
 	return nil
 }
