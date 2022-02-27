@@ -38,6 +38,24 @@ func GetAll() ([]Deck, *errors.RestErr) {
 	return res, nil
 }
 
+
+// GetAllUserDecks retrieves a user's decks from the DB
+func GetAllUserDecks(userID int64) ([]Deck, *errors.RestErr) {
+	result, err := mongo_db.DB.Collection("decks").Find(context.TODO(), bson.M{"creator": userID})
+	if err != nil {
+		if err == mongo.ErrNoDocuments {
+			return nil, errors.NotFoundError("no decks found for the specified user")
+		}
+		log.Fatal(err)
+	}
+	var res []Deck
+	//TODO: error- cannot decode string into an int, fix deck id
+	if err = result.All(context.Background(), &res); err != nil {
+		log.Fatal(err)
+	}
+	return res, nil
+}
+
 func (deck *Deck) Save() (primitive.ObjectID, *errors.RestErr) {
 	res, err := mongo_db.DB.Collection("decks").InsertOne(context.TODO(), deck)
 	if err != nil {
