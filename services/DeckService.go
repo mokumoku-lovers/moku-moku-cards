@@ -5,8 +5,12 @@ import (
 	"moku-moku-cards/utils/errors"
 )
 
-func GetDeck(deckID int64) (*decks.Deck, *errors.RestErr) {
-	result := &decks.Deck{ID: deckID}
+func GetDeck(deckID string) (*decks.Deck, *errors.RestErr) {
+	objectID, err := primitive.ObjectIDFromHex(deckID)
+	if err != nil {
+		return nil, errors.NotFoundError("Invalid ID")
+	}
+	result := &decks.Deck{ID: objectID}
 	if err := result.Get(); err != nil {
 		return nil, err
 	}
