@@ -38,3 +38,21 @@ func (card *Card) Post() *errors.RestErr {
 
 	return nil
 }
+
+// Delete the specified card from the DB
+func (card *Card) Delete() *errors.RestErr {
+	one, err := mongo_db.DB.Collection("cards").DeleteOne(
+		context.Background(),
+		bson.D{{"_id", card.ID}},
+	)
+
+	if err != nil {
+		return errors.BadRequest("bad request")
+	}
+
+	if one.DeletedCount == 0 {
+		return errors.NotFoundError("card not found")
+	}
+
+	return nil
+}
