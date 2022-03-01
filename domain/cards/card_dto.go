@@ -1,12 +1,15 @@
 package cards
 
-import "moku-moku-cards/utils/errors"
+import (
+	"go.mongodb.org/mongo-driver/bson/primitive"
+	"moku-moku-cards/utils/errors"
+)
 
 type Card struct {
-	ID    int64  `json:"id"`
-	Front string `json:"front"`
-	Back  string `json:"back"`
-	Image string `json:"image"`
+	ID    primitive.ObjectID `json:"id" bson:"_id"`
+	Front string             `json:"front"`
+	Back  string             `json:"back"`
+	Image string             `json:"image"`
 }
 
 // ValidateCard checks if all the data is correct
