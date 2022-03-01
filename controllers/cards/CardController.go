@@ -40,3 +40,13 @@ func PostCard(c *gin.Context) {
 
 	c.JSON(http.StatusOK, newCard)
 }
+
+func DeleteCard(c *gin.Context) {
+	cardID := c.Param("cardID")
+	msg, getErr := services.DeleteCard(cardID)
+	if getErr != nil {
+		c.JSON(getErr.Status, getErr)
+		return
+	}
+	c.JSON(http.StatusOK, msg)
+}
