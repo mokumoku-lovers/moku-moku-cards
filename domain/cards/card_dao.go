@@ -4,7 +4,9 @@ import (
 	"context"
 	"log"
 	"moku-moku-cards/datasources/mongo_db"
+	"moku-moku-cards/utils/docs"
 	"moku-moku-cards/utils/errors"
+	"reflect"
 
 	"go.mongodb.org/mongo-driver/bson"
 
@@ -55,4 +57,27 @@ func (card *Card) Delete() *errors.RestErr {
 	}
 
 	return nil
+}
+
+func (card *Card) PartialUpdate() (int64, *errors.RestErr) {
+	metaValue := reflect.ValueOf(card).Elem()
+	for _, name := range []string{"Front", "Back", "Image"} {
+		field := metaValue.FieldByName(name)
+		if !reflect.DeepEqual(field.Interface(), reflect.Zero(field.Type()).Interface()) {
+			bName, bErr := docs.FieldToBson(name)
+			if bErr != nil {
+				return 0, errors.BadRequest(bErr.Error())
+			}
+			_, err := mongo_db.DB.Collection("cards").UpdateOne(
+				context.TODO(),
+				bson.M{"_id": card.ID},
+				bson.D{
+					{"$set", bson.M{bName: field.Interface()}},
+				})
+			if err != nil {
+				return 0, errors.InternalServerError("failed updating document")
+			}
+		}
+	}
+	return 1, nil
 }
