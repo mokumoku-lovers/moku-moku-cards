@@ -16,5 +16,5 @@ func mapUrls() {
 	router.GET("/card/:cardID", cards.GetCard)
 	router.POST("/card", cards.PostCard)
 	router.DELETE("/card/:cardID", cards.DeleteCard)
-	router.PATCH("/card/:cardID", nil)
+	router.PATCH("/card/:cardID", cards.PartialUpdateCard)
 }
