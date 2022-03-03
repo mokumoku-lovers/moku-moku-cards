@@ -14,7 +14,7 @@ import (
 )
 
 func (card *Card) Get() *errors.RestErr {
-	err := mongo_db.DB.Collection("cards").FindOne(context.TODO(), bson.D{{"ID", card.ID}}).Decode(&card)
+	err := mongo_db.DB.Collection("cards").FindOne(context.TODO(), bson.D{{"_id", card.ID}}).Decode(&card)
 	if err != nil {
 		if err == mongo.ErrNoDocuments {
 			return errors.NotFoundError("card not found")
