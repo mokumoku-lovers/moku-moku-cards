@@ -2,7 +2,6 @@ package docs
 
 import (
 	"errors"
-
 	"go.mongodb.org/mongo-driver/bson"
 )
 
@@ -20,6 +19,14 @@ func FieldToBson(s string) (name string, err error) {
 	switch s {
 	case "ID":
 		return "_id", nil
+	case "Name":
+		return "name", nil
+	case "Cards":
+		return "cards", nil
+	case "Creator":
+		return "creator", nil
+	case "Date":
+		return "date", nil
 	case "Front":
 		return "front", nil
 	case "Back":
@@ -29,5 +36,4 @@ func FieldToBson(s string) (name string, err error) {
 	default:
 		return "", errors.New("failed parsing field name")
 	}
-
 }
