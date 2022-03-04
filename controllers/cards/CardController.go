@@ -1,11 +1,12 @@
 package cards
 
 import (
-	"github.com/gin-gonic/gin"
 	"moku-moku-cards/domain/cards"
 	"moku-moku-cards/services"
 	"moku-moku-cards/utils/errors"
 	"net/http"
+
+	"github.com/gin-gonic/gin"
 )
 
 func GetCard(c *gin.Context) {
@@ -49,4 +50,19 @@ func DeleteCard(c *gin.Context) {
 		return
 	}
 	c.JSON(http.StatusOK, msg)
+}
+
+func PartialUpdateCard(c *gin.Context) {
+	cardID := c.Param("cardID")
+	var card cards.Card
+	if err := c.ShouldBindJSON(&card); err != nil {
+		restErr := errors.BadRequest("invalid json body")
+		c.JSON(restErr.Status, restErr)
+	}
+	result, updateErr := services.PartialUpdateCard(cardID, card)
+	if updateErr != nil {
+		c.JSON(updateErr.Status, updateErr)
+		return
+	}
+	c.JSON(http.StatusOK, result)
 }

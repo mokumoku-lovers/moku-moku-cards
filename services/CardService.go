@@ -46,3 +46,16 @@ func DeleteCard(cardID string) (string, *errors.RestErr) {
 	}
 	return "card deleted", nil
 }
+
+func PartialUpdateCard(cardID string, card cards.Card) (int64, *errors.RestErr) {
+	objectId, idErr := primitive.ObjectIDFromHex(cardID)
+	if idErr != nil {
+		return 0, errors.BadRequest("Invalid ID")
+	}
+	card.ID = objectId
+	result, updateErr := card.PartialUpdate()
+	if updateErr != nil {
+		return 0, updateErr
+	}
+	return result, nil
+}
