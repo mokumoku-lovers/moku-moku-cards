@@ -9,6 +9,7 @@ import (
 	"moku-moku-cards/datasources/mongo_db"
 	"moku-moku-cards/utils/docs"
 	"moku-moku-cards/utils/errors"
+	"moku-moku-cards/utils/slices"
 	"reflect"
 )
 
@@ -115,6 +116,23 @@ func (deck *Deck) PartialUpdate() (int64, *errors.RestErr) {
 		if err != nil {
 			return 0, errors.InternalServerError("failed updating document field " + fieldName)
 		}
+	}
+	return 1, nil
+}
+
+func (deck *Deck) UpdateCards() (int64, *errors.RestErr) {
+	var original Deck
+	findErr := mongo_db.DB.Collection("decks").FindOne(context.TODO(), bson.D{{"_id", deck.ID}}).Decode(&original)
+	if findErr != nil {
+		if findErr == mongo.ErrNoDocuments {
+			return 0, errors.NotFoundError("deck not found")
+		}
+		log.Fatal(findErr)
+	}
+	deck.Cards = slices.Deduplicate(append(original.Cards, deck.Cards...))
+	_, updateErr := deck.UpdateField("Cards")
+	if updateErr != nil {
+		return 0, errors.InternalServerError("failed updating document field Cards")
 	}
 	return 1, nil
 }
