@@ -106,3 +106,19 @@ func GetUserDecks(c *gin.Context) {
 
 	c.JSON(http.StatusOK, decks)
 }
+
+func UpdateDeckCards(c *gin.Context) {
+	deckID := c.Param("deckID")
+	var deck decks.Deck
+	if err := c.ShouldBindJSON(&deck); err != nil {
+		restErr := errors.BadRequest("invalid json body")
+		c.JSON(restErr.Status, restErr)
+		return
+	}
+	result, updateErr := services.UpdateDeckCards(deckID, deck)
+	if updateErr != nil {
+		c.JSON(updateErr.Status, updateErr)
+		return
+	}
+	c.JSON(http.StatusOK, result)
+}
