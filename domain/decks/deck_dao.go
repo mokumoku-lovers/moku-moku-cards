@@ -90,22 +90,30 @@ func (deck *Deck) Update() (int64, *errors.RestErr) {
 	return result.ModifiedCount, nil
 }
 
-func (deck *Deck) PartialUpdate() (int64, *errors.RestErr) {
+func (deck *Deck) UpdateField(fieldName string) (int64, *errors.RestErr) {
 	metaValue := reflect.ValueOf(deck).Elem()
-	for _, name := range []string{"Name", "Cards", "Creator", "Date"} {
-		field := metaValue.FieldByName(name)
-		if !reflect.DeepEqual(field.Interface(), reflect.Zero(field.Type()).Interface()) {
-			bName, bErr := docs.FieldToBson(name)
-			if bErr != nil {
-				return 0, errors.BadRequest(bErr.Error())
-			}
-			_, err := mongo_db.DB.Collection("decks").UpdateOne(context.TODO(), bson.M{"_id": deck.ID},
-				bson.D{
-					{"$set", bson.M{bName: field.Interface()}},
-				})
-			if err != nil {
-				return 0, errors.InternalServerError("failed updating document")
-			}
+	field := metaValue.FieldByName(fieldName)
+	if !reflect.DeepEqual(field.Interface(), reflect.Zero(field.Type()).Interface()) {
+		bName, bErr := docs.FieldToBson(fieldName)
+		if bErr != nil {
+			return 0, errors.BadRequest(bErr.Error())
+		}
+		_, err := mongo_db.DB.Collection("decks").UpdateOne(context.TODO(), bson.M{"_id": deck.ID},
+			bson.D{
+				{"$set", bson.M{bName: field.Interface()}},
+			})
+		if err != nil {
+			return 0, errors.InternalServerError("failed updating document")
+		}
+	}
+	return 1, nil
+}
+
+func (deck *Deck) PartialUpdate() (int64, *errors.RestErr) {
+	for _, fieldName := range []string{"Name", "Cards", "Creator", "Date"} {
+		_, err := deck.UpdateField(fieldName)
+		if err != nil {
+			return 0, errors.InternalServerError("failed updating document field " + fieldName)
 		}
 	}
 	return 1, nil
