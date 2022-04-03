@@ -81,3 +81,16 @@ func PartialUpdateDeck(deckID string, deck decks.Deck) (int64, *errors.RestErr) 
 	}
 	return result, nil
 }
+
+func UpdateDeckCards(deckID string, deck decks.Deck) (int64, *errors.RestErr) {
+	objectID, idErr := primitive.ObjectIDFromHex(deckID)
+	if idErr != nil {
+		return 0, errors.BadRequest("Invalid ID")
+	}
+	deck.ID = objectID
+	result, updateErr := deck.UpdateCards()
+	if updateErr != nil {
+		return 0, updateErr
+	}
+	return result, nil
+}
