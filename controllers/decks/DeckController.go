@@ -42,6 +42,14 @@ func DeleteCardFromDeck(c *gin.Context) {
 		return
 	}
 
+	// Receive a slice of cardIDs to delete
+	var cardsIDs []string
+	if err := c.ShouldBindJSON(&cardsIDs); err != nil {
+		bodyErr := errors.BadRequest("invalid json body")
+		c.JSON(bodyErr.Status, bodyErr)
+		return
+	}
+
 	// Modify the cards array from the deck by deleting the specified card
 	services.DeleteCardFromDeck(deck, cardID)
 
