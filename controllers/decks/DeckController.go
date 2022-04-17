@@ -30,9 +30,9 @@ func DeleteDeck(c *gin.Context) {
 	c.JSON(http.StatusOK, "deck deleted")
 }
 
-// DeleteCardFromDeck gets the specified deck data back
+// DeleteCardsFromDeck gets the specified deck data back
 // looks for the card to be deleted from the deck and removes it
-func DeleteCardFromDeck(c *gin.Context) {
+func DeleteCardsFromDeck(c *gin.Context) {
 	deckID := c.Param("deckID")
 
 	// Get the deck back with the list of current cards
@@ -51,7 +51,7 @@ func DeleteCardFromDeck(c *gin.Context) {
 	}
 
 	// Modify the cards array from the deck by deleting the specified card
-	services.DeleteCardFromDeck(deck, cardID)
+	services.DeleteCardsFromDeck(deck, cardsIDs)
 
 	// Update the deck with the updated list of cards
 	res, updateErr := services.PartialUpdateDeck(deckID, *deck)
