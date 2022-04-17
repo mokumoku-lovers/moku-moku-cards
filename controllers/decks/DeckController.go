@@ -34,7 +34,7 @@ func DeleteDeck(c *gin.Context) {
 // looks for the card to be deleted from the deck and removes it
 func DeleteCardFromDeck(c *gin.Context) {
 	deckID := c.Param("deckID")
-	cardID, _ := strconv.ParseInt(c.Param("cardID"), 10, 64)
+	cardID := c.Param("cardID")
 
 	// Get the deck back with the list of current cards
 	deck, getErr := services.GetDeck(deckID)
