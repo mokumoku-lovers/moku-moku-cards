@@ -27,4 +27,13 @@ definitions:
           type: integer
           format: int64
 
-
+  RestErr:
+    type: object
+    properties:
+      message:
+        type: string
+      status:
+        type: integer
+        format: int
+      error:
+        type: string
