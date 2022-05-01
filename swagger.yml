@@ -1,3 +1,8 @@
+info:
+  title: Moku Moku Cards & Decks API
+  description: Flash cards learning platform's Cards & Decks CRUD micro-service API documention.
+  version: 1.0.0
+
 consumes:
   - application/json
 produces:
