@@ -1,3 +1,5 @@
+swagger: "2.0"
+
 info:
   title: Moku Moku Cards & Decks API
   description: Flash cards learning platform's Cards & Decks CRUD micro-service API documention.
