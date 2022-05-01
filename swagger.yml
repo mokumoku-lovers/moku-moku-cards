@@ -57,3 +57,22 @@ parameters:
     type: integer
     in: header
     required: true
+
+paths:
+  /decks:
+    get:
+      operationId: getDecks
+      description: Retrieve all decks available in the platform
+      parameters:
+        - $ref: '#/parameters/access_token'
+      responses:
+        '200':
+          description: decks data retrieved
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Deck'
+        default:
+          description: Error
+          schema:
+            $ref: '#/definitions/RestErr'
