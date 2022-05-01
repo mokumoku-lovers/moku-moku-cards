@@ -37,3 +37,10 @@ definitions:
         format: int
       error:
         type: string
+
+parameters:
+  access_token:
+    name: access_token
+    type: integer
+    in: header
+    required: true
