@@ -30,6 +30,23 @@ func DeleteDeck(deckID string) (*decks.Deck, *errors.RestErr) {
 	return result, nil
 }
 
+// DeleteCardsFromDeck removes the specified card from the card list of the deck
+func DeleteCardsFromDeck(deck *decks.Deck, cardsIDs []string) {
+	// TODO: Could be improved using a hashmap
+	// Loop the slice of cards to be deleted
+	for _, toDelete := range cardsIDs {
+		// Loop and find the card to delete
+		for i, card := range deck.Cards {
+			// Once found, get left slice and right slice
+			if card == toDelete {
+				left := deck.Cards[:i]
+				right := deck.Cards[i+1:]
+				deck.Cards = append(left, right...)
+			}
+		}
+	}
+}
+
 func GetDecks() ([]decks.Deck, *errors.RestErr) {
 	result, err := decks.GetAll()
 	if err != nil {
