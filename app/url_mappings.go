@@ -14,6 +14,7 @@ func mapUrls() {
 	router.DELETE("/deck/:deckID/cards", decks.DeleteCardsFromDeck)
 	router.PUT("/deck/:deckID", decks.UpdateDeck)
 	router.PATCH("/deck/:deckID", decks.PartialUpdateDeck)
+	router.PATCH("/deck/:deckID/cards", decks.UpdateDeckCards)
 
 	router.GET("/card/:cardID", cards.GetCard)
 	router.POST("/card", cards.PostCard)
