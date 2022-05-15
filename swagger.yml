@@ -260,3 +260,20 @@ paths:
           description: Card not found
           schema:
             $ref: '#/definitions/RestErr'
+    delete:
+      operationId: deleteCardByID
+      description: Deletes the specified deck
+      responses:
+        '200':
+          description: Returns the card
+          schema:
+            type: string
+            example: card deleted
+        '400':
+          description: Bad request
+          schema:
+            $ref: '#/definitions/RestErr'
+        '404':
+          description: Card not found
+          schema:
+            $ref: '#/definitions/RestErr'
