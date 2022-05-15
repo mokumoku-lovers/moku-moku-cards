@@ -160,3 +160,23 @@ paths:
           description: Deck not found
           schema:
             $ref: '#/definitions/RestErr'
+    put:
+      operationId: updateDeckByID
+      description: Full update of the specified deck
+      parameters:
+        - $ref: '#/parameters/access_token'
+      responses:
+        '200':
+          description: Deck successfully updated
+          schema:
+            type: integer
+            format: int64
+            example: 1
+        '400':
+          description: Invalid json body
+          schema:
+            $ref: '#/definitions/RestErr'
+        '404':
+          description: Deck not found
+          schema:
+            $ref: '#/definitions/RestErr'
