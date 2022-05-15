@@ -145,3 +145,18 @@ paths:
           description: Deck not found
           schema:
             $ref: '#/definitions/RestErr'
+    delete:
+      operationId: deleteDeckByID
+      description: Delete the specified deck
+      parameters:
+        - $ref: '#/parameters/access_token'
+      responses:
+        '200':
+          description: Deck deleted
+          schema:
+            type: string
+            example: deck deleted
+        '404':
+          description: Deck not found
+          schema:
+            $ref: '#/definitions/RestErr'
