@@ -180,3 +180,23 @@ paths:
           description: Deck not found
           schema:
             $ref: '#/definitions/RestErr'
+    patch:
+      operationId: partialUpdateDeckByID
+      description: Partial update of the specified deck
+      parameters:
+        - $ref: '#/parameters/access_token'
+      responses:
+        '200':
+          description: Deck successfully patched
+          schema:
+            type: integer
+            format: int64
+            example: 1
+        '400':
+          description: Invalid json body
+          schema:
+            $ref: '#/definitions/RestErr'
+        '500':
+          description: Something failed while patching
+          schema:
+            $ref: '#/definitions/RestErr'
