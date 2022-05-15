@@ -237,3 +237,26 @@ paths:
           description: Something failed while creating a card
           schema:
             $ref: '#/definitions/RestErr'
+  /card/{cardID}:
+    parameters:
+      - $ref: '#/parameters/access_token'
+      - name: cardID
+        in: query
+        required: true
+        type: string
+    get:
+      operationId: getCardByID
+      description: Full update of the specified deck
+      responses:
+        '200':
+          description: Returns the card
+          schema:
+            $ref: '#/definitions/Card'
+        '400':
+          description: Bad request
+          schema:
+            $ref: '#/definitions/RestErr'
+        '404':
+          description: Card not found
+          schema:
+            $ref: '#/definitions/RestErr'
