@@ -76,3 +76,24 @@ paths:
           description: Error
           schema:
             $ref: '#/definitions/RestErr'
+  /decks/{userID}:
+    get:
+      operationId: getUserDecks
+      description: Retrieve all decks from the specified user
+      parameters:
+        - $ref: '#/parameters/access_token'
+        - name: userID
+          in: query
+          type: string
+          required: true
+      responses:
+        '200':
+          description: retrived all decks from the specified user
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Deck'
+        default:
+          description: Error
+          schema:
+            $ref: '#/definitions/RestErr'
