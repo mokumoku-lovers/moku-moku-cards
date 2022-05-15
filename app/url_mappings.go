@@ -1,8 +1,11 @@
 package app
 
 import (
+	"github.com/gin-gonic/gin"
+	"github.com/go-openapi/runtime/middleware"
 	"moku-moku-cards/controllers/cards"
 	"moku-moku-cards/controllers/decks"
+	"net/http"
 )
 
 func mapUrls() {
@@ -18,4 +21,10 @@ func mapUrls() {
 	router.POST("/card", cards.PostCard)
 	router.DELETE("/card/:cardID", cards.DeleteCard)
 	router.PATCH("/card/:cardID", cards.PartialUpdateCard)
+
+	// Swagger documentation
+	opts := middleware.RedocOpts{SpecURL: "./swagger.yml", Title: "Moku-Moku-Cards"}
+	swg := middleware.Redoc(opts, nil)
+	router.GET("/docs", gin.WrapH(swg))
+	router.GET("/swagger.yml", gin.WrapH(http.FileServer(http.Dir("./"))))
 }
