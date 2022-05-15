@@ -125,3 +125,23 @@ paths:
           description: Invalid json body
           schema:
             $ref: '#/definitions/RestErr'
+  /deck/{deckID}:
+    parameters:
+      - name: deckID
+        in: query
+        required: true
+        type: string
+    get:
+      operationId: getDeckByID
+      description: Retrieve the specified deck
+      parameters:
+        - $ref: '#/parameters/access_token'
+      responses:
+        '200':
+          description: Returns the deck
+          schema:
+            $ref: '#/definitions/Deck'
+        '404':
+          description: Deck not found
+          schema:
+            $ref: '#/definitions/RestErr'
