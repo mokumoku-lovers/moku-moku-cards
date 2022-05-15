@@ -277,3 +277,21 @@ paths:
           description: Card not found
           schema:
             $ref: '#/definitions/RestErr'
+    patch:
+      operationId: patchCardByID
+      description: Partial update of the specified card
+      responses:
+        '200':
+          description: Card successfully updated
+          schema:
+            type: integer
+            format: int64
+            example: 1
+        '400':
+          description: Bad request
+          schema:
+            $ref: '#/definitions/RestErr'
+        '500':
+          description: Something failed while patching
+          schema:
+            $ref: '#/definitions/RestErr'
