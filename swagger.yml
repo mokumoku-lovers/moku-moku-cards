@@ -39,7 +39,9 @@ definitions:
         items:
           type: integer
           format: int64
-
+      creator:
+        type: integer
+        format: int64
   RestErr:
     type: object
     properties:
@@ -95,5 +97,31 @@ paths:
               $ref: '#/definitions/Deck'
         default:
           description: Error
+          schema:
+            $ref: '#/definitions/RestErr'
+  /deck:
+    post:
+      operationId: createDeck
+      description: Creates a new deck
+      parameters:
+        - name: new_deck_data
+          in: body
+          required: true
+          schema:
+            allOf:
+            - $ref: '#/definitions/Deck'
+            type: object
+            properties:
+              id:
+                type: string
+                readOnly: true
+      responses:
+        '201':
+          description: A new deck has been created
+          schema:
+            type: number
+            format: byte
+        '400':
+          description: Invalid json body
           schema:
             $ref: '#/definitions/RestErr'
