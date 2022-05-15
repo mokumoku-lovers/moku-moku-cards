@@ -200,3 +200,40 @@ paths:
           description: Something failed while patching
           schema:
             $ref: '#/definitions/RestErr'
+  /card:
+    post:
+      consumes:
+        - application/json
+        - multipart/form-data
+      operationId: postCard
+      description: Create a new card
+      parameters:
+        - name: new_card_data
+          in: body
+          required: true
+          schema:
+            allOf:
+              - $ref: '#/definitions/Card'
+            type: object
+            properties:
+              id:
+                type: string
+                readOnly: true
+        - name: card_image
+          in: formData
+          type: file
+          description: Card image
+          x-mimetype: image/jpeg
+      responses:
+        '200':
+          description: A new card has been created
+          schema:
+            $ref: '#/definitions/Card'
+        '400':
+          description: Invalid json body
+          schema:
+            $ref: '#/definitions/RestErr'
+        '500':
+          description: Something failed while creating a card
+          schema:
+            $ref: '#/definitions/RestErr'
