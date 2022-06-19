@@ -1,0 +1,297 @@
+swagger: "2.0"
+
+info:
+  title: Moku Moku Cards & Decks API
+  description: Flash cards learning platform's Cards & Decks CRUD micro-service API documention.
+  version: 1.0.0
+
+consumes:
+  - application/json
+produces:
+  - application/json
+
+schemes:
+  - http
+  - https
+
+definitions:
+  Card:
+    type: object
+    properties:
+      id:
+        type: string
+      front:
+        type: string
+      back:
+        type: string
+      image:
+        type: string
+
+  Deck:
+    type: object
+    properties:
+      id:
+        type: string
+      name:
+        type: string
+      cards:
+        type: array
+        items:
+          type: integer
+          format: int64
+      creator:
+        type: integer
+        format: int64
+  RestErr:
+    type: object
+    properties:
+      message:
+        type: string
+      status:
+        type: integer
+        format: int
+      error:
+        type: string
+
+parameters:
+  access_token:
+    name: access_token
+    type: integer
+    in: header
+    required: true
+
+paths:
+  /decks:
+    get:
+      operationId: getDecks
+      description: Retrieve all decks available in the platform
+      parameters:
+        - $ref: '#/parameters/access_token'
+      responses:
+        '200':
+          description: decks data retrieved
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Deck'
+        default:
+          description: Error
+          schema:
+            $ref: '#/definitions/RestErr'
+  /decks/{userID}:
+    get:
+      operationId: getUserDecks
+      description: Retrieve all decks from the specified user
+      parameters:
+        - $ref: '#/parameters/access_token'
+        - name: userID
+          in: query
+          type: string
+          required: true
+      responses:
+        '200':
+          description: retrived all decks from the specified user
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Deck'
+        default:
+          description: Error
+          schema:
+            $ref: '#/definitions/RestErr'
+  /deck:
+    post:
+      operationId: createDeck
+      description: Creates a new deck
+      parameters:
+        - name: new_deck_data
+          in: body
+          required: true
+          schema:
+            allOf:
+            - $ref: '#/definitions/Deck'
+            type: object
+            properties:
+              id:
+                type: string
+                readOnly: true
+      responses:
+        '201':
+          description: A new deck has been created
+          schema:
+            type: number
+            format: byte
+        '400':
+          description: Invalid json body
+          schema:
+            $ref: '#/definitions/RestErr'
+  /deck/{deckID}:
+    parameters:
+      - name: deckID
+        in: query
+        required: true
+        type: string
+    get:
+      operationId: getDeckByID
+      description: Retrieve the specified deck
+      parameters:
+        - $ref: '#/parameters/access_token'
+      responses:
+        '200':
+          description: Returns the deck
+          schema:
+            $ref: '#/definitions/Deck'
+        '404':
+          description: Deck not found
+          schema:
+            $ref: '#/definitions/RestErr'
+    delete:
+      operationId: deleteDeckByID
+      description: Delete the specified deck
+      parameters:
+        - $ref: '#/parameters/access_token'
+      responses:
+        '200':
+          description: Deck deleted
+          schema:
+            type: string
+            example: deck deleted
+        '404':
+          description: Deck not found
+          schema:
+            $ref: '#/definitions/RestErr'
+    put:
+      operationId: updateDeckByID
+      description: Full update of the specified deck
+      parameters:
+        - $ref: '#/parameters/access_token'
+      responses:
+        '200':
+          description: Deck successfully updated
+          schema:
+            type: integer
+            format: int64
+            example: 1
+        '400':
+          description: Invalid json body
+          schema:
+            $ref: '#/definitions/RestErr'
+        '404':
+          description: Deck not found
+          schema:
+            $ref: '#/definitions/RestErr'
+    patch:
+      operationId: partialUpdateDeckByID
+      description: Partial update of the specified deck
+      parameters:
+        - $ref: '#/parameters/access_token'
+      responses:
+        '200':
+          description: Deck successfully patched
+          schema:
+            type: integer
+            format: int64
+            example: 1
+        '400':
+          description: Invalid json body
+          schema:
+            $ref: '#/definitions/RestErr'
+        '500':
+          description: Something failed while patching
+          schema:
+            $ref: '#/definitions/RestErr'
+  /card:
+    post:
+      consumes:
+        - application/json
+        - multipart/form-data
+      operationId: postCard
+      description: Create a new card
+      parameters:
+        - name: new_card_data
+          in: body
+          required: true
+          schema:
+            allOf:
+              - $ref: '#/definitions/Card'
+            type: object
+            properties:
+              id:
+                type: string
+                readOnly: true
+        - name: card_image
+          in: formData
+          type: file
+          description: Card image
+          x-mimetype: image/jpeg
+      responses:
+        '200':
+          description: A new card has been created
+          schema:
+            $ref: '#/definitions/Card'
+        '400':
+          description: Invalid json body
+          schema:
+            $ref: '#/definitions/RestErr'
+        '500':
+          description: Something failed while creating a card
+          schema:
+            $ref: '#/definitions/RestErr'
+  /card/{cardID}:
+    parameters:
+      - $ref: '#/parameters/access_token'
+      - name: cardID
+        in: query
+        required: true
+        type: string
+    get:
+      operationId: getCardByID
+      description: Full update of the specified deck
+      responses:
+        '200':
+          description: Returns the card
+          schema:
+            $ref: '#/definitions/Card'
+        '400':
+          description: Bad request
+          schema:
+            $ref: '#/definitions/RestErr'
+        '404':
+          description: Card not found
+          schema:
+            $ref: '#/definitions/RestErr'
+    delete:
+      operationId: deleteCardByID
+      description: Deletes the specified deck
+      responses:
+        '200':
+          description: Returns the card
+          schema:
+            type: string
+            example: card deleted
+        '400':
+          description: Bad request
+          schema:
+            $ref: '#/definitions/RestErr'
+        '404':
+          description: Card not found
+          schema:
+            $ref: '#/definitions/RestErr'
+    patch:
+      operationId: patchCardByID
+      description: Partial update of the specified card
+      responses:
+        '200':
+          description: Card successfully updated
+          schema:
+            type: integer
+            format: int64
+            example: 1
+        '400':
+          description: Bad request
+          schema:
+            $ref: '#/definitions/RestErr'
+        '500':
+          description: Something failed while patching
+          schema:
+            $ref: '#/definitions/RestErr'
