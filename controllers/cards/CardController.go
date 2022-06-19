@@ -10,9 +10,15 @@ import (
 	"os"
 
 	"github.com/gin-gonic/gin"
+	"github.com/mokumoku-lovers/moku-moku-oauth-go/oauth"
 )
 
 func GetCard(c *gin.Context) {
+	requestErr := oauth.AuthenticateRequest(c.Request)
+	if requestErr != nil {
+		c.JSON(requestErr.Status, requestErr)
+		return
+	}
 	cardID := c.Param("cardID")
 	card, getErr := services.GetCard(cardID)
 	if getErr != nil {
@@ -25,6 +31,11 @@ func GetCard(c *gin.Context) {
 // PostCard controller creates a new card based on the data provided by the
 // request body.
 func PostCard(c *gin.Context) {
+	requestErr := oauth.AuthenticateRequest(c.Request)
+	if requestErr != nil {
+		c.JSON(requestErr.Status, requestErr)
+		return
+	}
 	var newCard cards.Card
 	//Get card info from request body
 	if err := c.ShouldBind(&newCard); err != nil {
@@ -69,6 +80,11 @@ func PostCard(c *gin.Context) {
 }
 
 func DeleteCard(c *gin.Context) {
+	requestErr := oauth.AuthenticateRequest(c.Request)
+	if requestErr != nil {
+		c.JSON(requestErr.Status, requestErr)
+		return
+	}
 	cardID := c.Param("cardID")
 	msg, getErr := services.DeleteCard(cardID)
 	if getErr != nil {
@@ -79,6 +95,11 @@ func DeleteCard(c *gin.Context) {
 }
 
 func PartialUpdateCard(c *gin.Context) {
+	requestErr := oauth.AuthenticateRequest(c.Request)
+	if requestErr != nil {
+		c.JSON(requestErr.Status, requestErr)
+		return
+	}
 	cardID := c.Param("cardID")
 	var card cards.Card
 	if err := c.ShouldBindJSON(&card); err != nil {

@@ -2,6 +2,7 @@ package decks
 
 import (
 	"github.com/gin-gonic/gin"
+	"github.com/mokumoku-lovers/moku-moku-oauth-go/oauth"
 	"moku-moku-cards/domain/decks"
 	"moku-moku-cards/services"
 	"moku-moku-cards/utils/errors"
@@ -10,6 +11,11 @@ import (
 )
 
 func GetDeck(c *gin.Context) {
+	requestErr := oauth.AuthenticateRequest(c.Request)
+	if requestErr != nil {
+		c.JSON(requestErr.Status, requestErr)
+		return
+	}
 	deckID := c.Param("deckID")
 	deck, getErr := services.GetDeck(deckID)
 	if getErr != nil {
@@ -20,6 +26,11 @@ func GetDeck(c *gin.Context) {
 }
 
 func DeleteDeck(c *gin.Context) {
+	requestErr := oauth.AuthenticateRequest(c.Request)
+	if requestErr != nil {
+		c.JSON(requestErr.Status, requestErr)
+		return
+	}
 	deckID := c.Param("deckID")
 
 	_, deleteErr := services.DeleteDeck(deckID)
@@ -33,6 +44,11 @@ func DeleteDeck(c *gin.Context) {
 // DeleteCardsFromDeck gets the specified deck data back
 // looks for the card to be deleted from the deck and removes it
 func DeleteCardsFromDeck(c *gin.Context) {
+	requestErr := oauth.AuthenticateRequest(c.Request)
+	if requestErr != nil {
+		c.JSON(requestErr.Status, requestErr)
+		return
+	}
 	deckID := c.Param("deckID")
 
 	// Get the deck back with the list of current cards
@@ -64,6 +80,11 @@ func DeleteCardsFromDeck(c *gin.Context) {
 }
 
 func CreateDeck(c *gin.Context) {
+	requestErr := oauth.AuthenticateRequest(c.Request)
+	if requestErr != nil {
+		c.JSON(requestErr.Status, requestErr)
+		return
+	}
 	var deck decks.Deck
 	if err := c.ShouldBindJSON(&deck); err != nil {
 		restErr := errors.BadRequest("invalid json body")
@@ -80,6 +101,11 @@ func CreateDeck(c *gin.Context) {
 }
 
 func UpdateDeck(c *gin.Context) {
+	requestErr := oauth.AuthenticateRequest(c.Request)
+	if requestErr != nil {
+		c.JSON(requestErr.Status, requestErr)
+		return
+	}
 	deckID := c.Param("deckID")
 	var deck decks.Deck
 	if err := c.ShouldBindJSON(&deck); err != nil {
@@ -96,6 +122,11 @@ func UpdateDeck(c *gin.Context) {
 }
 
 func PartialUpdateDeck(c *gin.Context) {
+	requestErr := oauth.AuthenticateRequest(c.Request)
+	if requestErr != nil {
+		c.JSON(requestErr.Status, requestErr)
+		return
+	}
 	deckID := c.Param("deckID")
 	var deck decks.Deck
 	if err := c.ShouldBindJSON(&deck); err != nil {
@@ -113,6 +144,11 @@ func PartialUpdateDeck(c *gin.Context) {
 
 //get all decks in db
 func GetDecks(c *gin.Context) {
+	requestErr := oauth.AuthenticateRequest(c.Request)
+	if requestErr != nil {
+		c.JSON(requestErr.Status, requestErr)
+		return
+	}
 	decks, getErr := services.GetDecks()
 	if getErr != nil {
 		c.JSON(getErr.Status, getErr)
@@ -124,6 +160,11 @@ func GetDecks(c *gin.Context) {
 // GetUserDecks retrieves all the decks from the
 // specified user
 func GetUserDecks(c *gin.Context) {
+	requestErr := oauth.AuthenticateRequest(c.Request)
+	if requestErr != nil {
+		c.JSON(requestErr.Status, requestErr)
+		return
+	}
 	userID, err := strconv.ParseInt(c.Param("userID"), 10, 64)
 	if err != nil {
 		badRequest := errors.BadRequest("invalid userID")
@@ -141,6 +182,11 @@ func GetUserDecks(c *gin.Context) {
 }
 
 func UpdateDeckCards(c *gin.Context) {
+	requestErr := oauth.AuthenticateRequest(c.Request)
+	if requestErr != nil {
+		c.JSON(requestErr.Status, requestErr)
+		return
+	}
 	deckID := c.Param("deckID")
 	var deck decks.Deck
 	if err := c.ShouldBindJSON(&deck); err != nil {
