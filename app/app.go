@@ -12,7 +12,7 @@ var (
 func StartApp() {
 	router.Use(cors.Default())
 	mapUrls()
-	err := router.Run(":8080")
+	err := router.Run(":9002")
 	if err != nil {
 		return
 	}
