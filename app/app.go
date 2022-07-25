@@ -10,7 +10,10 @@ var (
 )
 
 func StartApp() {
-	router.Use(cors.Default())
+	corsMiddlewareConfig := cors.DefaultConfig()
+	corsMiddlewareConfig.AllowHeaders = []string{"Origin", "Content-Length", "Content-Type", "access_token"}
+	router.Use(cors.New(corsMiddlewareConfig))
+
 	mapUrls()
 	err := router.Run(":9002")
 	if err != nil {
