@@ -4,6 +4,7 @@ import (
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"moku-moku-cards/domain/cards"
 	"moku-moku-cards/utils/errors"
+	"moku-moku-cards/utils/slices"
 )
 
 func GetCard(cardID string) (*cards.Card, *errors.RestErr) {
@@ -43,6 +44,19 @@ func DeleteCard(cardID string) (string, *errors.RestErr) {
 	result := &cards.Card{ID: objectID}
 	if deleteCardError := result.Delete(); deleteCardError != nil {
 		return "", deleteCardError
+	}
+	allDecks, getDecksError := GetDecks()
+	if getDecksError != nil {
+		return "", getDecksError
+	}
+	for _, deck := range allDecks {
+		for cardIndex := range deck.Cards {
+			if deck.Cards[cardIndex] == cardID {
+				deck.Cards = slices.RemoveIndex(deck.Cards, cardIndex)
+				deck.UpdateField("Cards")
+				break
+			}
+		}
 	}
 	return "card deleted", nil
 }
