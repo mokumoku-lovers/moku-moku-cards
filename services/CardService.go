@@ -36,13 +36,13 @@ func PostCard(card *cards.Card) *errors.RestErr {
 }
 
 func DeleteCard(cardID string) (string, *errors.RestErr) {
-	objectID, err := primitive.ObjectIDFromHex(cardID)
-	if err != nil {
+	objectID, parseIDError := primitive.ObjectIDFromHex(cardID)
+	if parseIDError != nil {
 		return "", errors.BadRequest("invalid card ID")
 	}
 	result := &cards.Card{ID: objectID}
-	if err := result.Delete(); err != nil {
-		return "", err
+	if deleteCardError := result.Delete(); deleteCardError != nil {
+		return "", deleteCardError
 	}
 	return "card deleted", nil
 }
