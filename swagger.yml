@@ -200,6 +200,13 @@ paths:
           description: Something failed while patching
           schema:
             $ref: '#/definitions/RestErr'
+  /deck/{deckID}/cards:
+    parameters:
+      - name: deckID
+        in: query
+        required: true
+        type: string
+
   /card:
     post:
       consumes:
