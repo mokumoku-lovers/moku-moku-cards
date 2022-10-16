@@ -229,6 +229,29 @@ paths:
           description: Failed to update the cards list
           schema:
             $ref: '#/definitions/RestErr'
+    patch:
+      operationId: updateDeckCards
+      description: Updates the specified cards from a deck
+      parameters:
+        - $ref: '#/parameters/access_token'
+      responses:
+        '200':
+          description: Deck deleted
+          schema:
+            type: string
+            example: deck deleted
+        '400':
+          description: The JSON body is invalid
+          schema:
+            $ref: '#/definitions/RestErr'
+        '404':
+          description: The specified deck does not exist, invalid deckID
+          schema:
+            $ref: '#/definitions/RestErr'
+        '500':
+          description: Failed to update the cards list
+          schema:
+            $ref: '#/definitions/RestErr'
   /card:
     post:
       consumes:
