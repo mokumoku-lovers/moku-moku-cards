@@ -206,7 +206,29 @@ paths:
         in: query
         required: true
         type: string
-
+    delete:
+      operationId: deleteCardsFromDeck
+      description: Delete the specified cards from a deck
+      parameters:
+        - $ref: '#/parameters/access_token'
+      responses:
+        '200':
+          description: Specified cards deleted from the deck
+          schema:
+            type: string
+            example: 1
+        '400':
+          description: The JSON body is invalid
+          schema:
+            $ref: '#/definitions/RestErr'
+        '404':
+          description: The specified deck does not exist, invalid deckID
+          schema:
+            $ref: '#/definitions/RestErr'
+        '500':
+          description: Failed to update the cards list
+          schema:
+            $ref: '#/definitions/RestErr'
   /card:
     post:
       consumes:
