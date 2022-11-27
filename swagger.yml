@@ -347,3 +347,25 @@ paths:
           description: Something failed while patching
           schema:
             $ref: '#/definitions/RestErr'
+  /card/pics/{pic_hash}:
+    parameters:
+      - $ref: '#/parameters/access_token'
+      - in: path
+        type: string
+        format: string
+        name: pic_hash
+        required: true
+        description: The relative image path (image) from the Card DTO
+    get:
+      tags:
+        - card
+      produces:
+        - image/png
+        - image/jpeg
+      operationId: GetCardPicture
+      description: Retrieve the picture of a card
+      responses:
+        '200':
+          description: Card picture retrieved correctly
+        '404':
+          description: Card picture not found
