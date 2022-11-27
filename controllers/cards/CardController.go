@@ -8,6 +8,7 @@ import (
 	"moku-moku-cards/utils/errors"
 	"net/http"
 	"os"
+	"strings"
 
 	"github.com/gin-gonic/gin"
 	"github.com/mokumoku-lovers/moku-moku-oauth-go/oauth"
@@ -48,21 +49,22 @@ func PostCard(c *gin.Context) {
 	file, _ := c.FormFile("file")
 	if file != nil {
 		fileType := file.Header.Get("Content-Type")
-		if fileType != "image/jpeg" {
+		if fileType != "image/jpeg" && fileType != "image/png" {
 			c.JSON(http.StatusBadRequest, errors.BadRequest("file must be of type image"))
 		}
-		name := file.Filename
-		hashedName := sha256.Sum256([]byte(name))
-		hashedNameString := hex.EncodeToString(hashedName[:][:])
-		newCard.Image = hashedNameString
+
+		name := strings.Split(file.Filename, ".")
+		hashedName := sha256.Sum256([]byte(name[0]))
+		hashedNameString := hex.EncodeToString(hashedName[:])
+		newCard.Image = hashedNameString + "." + name[1]
 
 		//write file to basePath
-		basePath := "/MokuMoku/card_images/"
+		basePath := "./MokuMoku/card_images/"
 		if _, err := os.Stat(basePath); os.IsNotExist(err) {
 			//create directory
 			os.MkdirAll(basePath, 0700)
 		}
-		saveErr := c.SaveUploadedFile(file, basePath+hashedNameString+".png")
+		saveErr := c.SaveUploadedFile(file, basePath+hashedNameString+"."+name[1])
 		if saveErr != nil {
 			c.JSON(http.StatusInternalServerError, errors.InternalServerError("file could not be saved"))
 		}
