@@ -272,6 +272,8 @@ paths:
             $ref: '#/definitions/RestErr'
   /card:
     post:
+      tags:
+        - card
       consumes:
         - application/json
         - multipart/form-data
@@ -315,6 +317,8 @@ paths:
         required: true
         type: string
     get:
+      tags:
+        - card
       operationId: getCardByID
       description: Full update of the specified deck
       responses:
@@ -331,6 +335,8 @@ paths:
           schema:
             $ref: '#/definitions/RestErr'
     delete:
+      tags:
+        - card
       operationId: deleteCardByID
       description: Deletes the specified deck
       responses:
@@ -348,6 +354,8 @@ paths:
           schema:
             $ref: '#/definitions/RestErr'
     patch:
+      tags:
+        - card
       operationId: patchCardByID
       description: Partial update of the specified card
       responses:
