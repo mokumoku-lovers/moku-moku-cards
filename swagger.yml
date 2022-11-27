@@ -63,6 +63,8 @@ parameters:
 paths:
   /decks:
     get:
+      tags:
+        - deck
       operationId: getDecks
       description: Retrieve all decks available in the platform
       parameters:
@@ -80,6 +82,8 @@ paths:
             $ref: '#/definitions/RestErr'
   /decks/{userID}:
     get:
+      tags:
+        - deck
       operationId: getUserDecks
       description: Retrieve all decks from the specified user
       parameters:
@@ -101,6 +105,8 @@ paths:
             $ref: '#/definitions/RestErr'
   /deck:
     post:
+      tags:
+        - deck
       operationId: createDeck
       description: Creates a new deck
       parameters:
@@ -132,6 +138,8 @@ paths:
         required: true
         type: string
     get:
+      tags:
+        - deck
       operationId: getDeckByID
       description: Retrieve the specified deck
       parameters:
@@ -146,6 +154,8 @@ paths:
           schema:
             $ref: '#/definitions/RestErr'
     delete:
+      tags:
+        - deck
       operationId: deleteDeckByID
       description: Delete the specified deck
       parameters:
@@ -161,6 +171,8 @@ paths:
           schema:
             $ref: '#/definitions/RestErr'
     put:
+      tags:
+        - deck
       operationId: updateDeckByID
       description: Full update of the specified deck
       parameters:
@@ -181,6 +193,8 @@ paths:
           schema:
             $ref: '#/definitions/RestErr'
     patch:
+      tags:
+        - deck
       operationId: partialUpdateDeckByID
       description: Partial update of the specified deck
       parameters:
@@ -207,6 +221,8 @@ paths:
         required: true
         type: string
     delete:
+      tags:
+        - deck
       operationId: deleteCardsFromDeck
       description: Delete the specified cards from a deck
       parameters:
@@ -230,6 +246,8 @@ paths:
           schema:
             $ref: '#/definitions/RestErr'
     patch:
+      tags:
+        - deck
       operationId: updateDeckCards
       description: Updates the specified cards from a deck
       parameters:
