@@ -81,6 +81,18 @@ func PostCard(c *gin.Context) {
 	c.JSON(http.StatusOK, newCard)
 }
 
+func GetCardPicture(c *gin.Context) {
+	picHash := c.Param("pic_hash")
+
+	if picHash == "" {
+		c.JSON(http.StatusNotFound, "could not find the card picture")
+		return
+	}
+	basePath := "./MokuMoku/card_images/"
+
+	c.File(basePath + picHash)
+}
+
 func DeleteCard(c *gin.Context) {
 	requestErr := oauth.AuthenticateRequest(c.Request)
 	if requestErr != nil {
