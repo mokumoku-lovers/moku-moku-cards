@@ -23,6 +23,7 @@ func mapUrls() {
 	router.POST("/card", cards.PostCard)
 	router.DELETE("/card/:cardID", cards.DeleteCard)
 	router.PATCH("/card/:cardID", cards.PartialUpdateCard)
+	router.GET("/card/:pic_hash", cards.GetCardPicture)
 
 	// Swagger documentation
 	opts := middleware.RedocOpts{SpecURL: "./swagger.yml", Title: "Moku-Moku-Cards"}
