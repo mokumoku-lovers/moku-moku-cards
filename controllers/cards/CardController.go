@@ -14,6 +14,8 @@ import (
 	"github.com/mokumoku-lovers/moku-moku-oauth-go/oauth"
 )
 
+const BASE_PATH = "./MokuMoku/card_images/"
+
 func GetCard(c *gin.Context) {
 	requestErr := oauth.AuthenticateRequest(c.Request)
 	if requestErr != nil {
@@ -59,12 +61,11 @@ func PostCard(c *gin.Context) {
 		newCard.Image = hashedNameString + "." + name[1]
 
 		//write file to basePath
-		basePath := "./MokuMoku/card_images/"
-		if _, err := os.Stat(basePath); os.IsNotExist(err) {
+		if _, err := os.Stat(BASE_PATH); os.IsNotExist(err) {
 			//create directory
-			os.MkdirAll(basePath, 0700)
+			os.MkdirAll(BASE_PATH, 0700)
 		}
-		saveErr := c.SaveUploadedFile(file, basePath+hashedNameString+"."+name[1])
+		saveErr := c.SaveUploadedFile(file, BASE_PATH+hashedNameString+"."+name[1])
 		if saveErr != nil {
 			c.JSON(http.StatusInternalServerError, errors.InternalServerError("file could not be saved"))
 		}
@@ -88,9 +89,8 @@ func GetCardPicture(c *gin.Context) {
 		c.JSON(http.StatusNotFound, "could not find the card picture")
 		return
 	}
-	basePath := "./MokuMoku/card_images/"
 
-	c.File(basePath + picHash)
+	c.File(BASE_PATH + picHash)
 }
 
 func DeleteCard(c *gin.Context) {
