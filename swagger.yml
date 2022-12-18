@@ -63,6 +63,8 @@ parameters:
 paths:
   /decks:
     get:
+      tags:
+        - deck
       operationId: getDecks
       description: Retrieve all decks available in the platform
       parameters:
@@ -80,6 +82,8 @@ paths:
             $ref: '#/definitions/RestErr'
   /decks/{userID}:
     get:
+      tags:
+        - deck
       operationId: getUserDecks
       description: Retrieve all decks from the specified user
       parameters:
@@ -101,6 +105,8 @@ paths:
             $ref: '#/definitions/RestErr'
   /deck:
     post:
+      tags:
+        - deck
       operationId: createDeck
       description: Creates a new deck
       parameters:
@@ -132,6 +138,8 @@ paths:
         required: true
         type: string
     get:
+      tags:
+        - deck
       operationId: getDeckByID
       description: Retrieve the specified deck
       parameters:
@@ -146,6 +154,8 @@ paths:
           schema:
             $ref: '#/definitions/RestErr'
     delete:
+      tags:
+        - deck
       operationId: deleteDeckByID
       description: Delete the specified deck
       parameters:
@@ -161,6 +171,8 @@ paths:
           schema:
             $ref: '#/definitions/RestErr'
     put:
+      tags:
+        - deck
       operationId: updateDeckByID
       description: Full update of the specified deck
       parameters:
@@ -181,6 +193,8 @@ paths:
           schema:
             $ref: '#/definitions/RestErr'
     patch:
+      tags:
+        - deck
       operationId: partialUpdateDeckByID
       description: Partial update of the specified deck
       parameters:
@@ -200,8 +214,66 @@ paths:
           description: Something failed while patching
           schema:
             $ref: '#/definitions/RestErr'
+  /deck/{deckID}/cards:
+    parameters:
+      - name: deckID
+        in: query
+        required: true
+        type: string
+    delete:
+      tags:
+        - deck
+      operationId: deleteCardsFromDeck
+      description: Delete the specified cards from a deck
+      parameters:
+        - $ref: '#/parameters/access_token'
+      responses:
+        '200':
+          description: Specified cards deleted from the deck
+          schema:
+            type: string
+            example: 1
+        '400':
+          description: The JSON body is invalid
+          schema:
+            $ref: '#/definitions/RestErr'
+        '404':
+          description: The specified deck does not exist, invalid deckID
+          schema:
+            $ref: '#/definitions/RestErr'
+        '500':
+          description: Failed to update the cards list
+          schema:
+            $ref: '#/definitions/RestErr'
+    patch:
+      tags:
+        - deck
+      operationId: updateDeckCards
+      description: Updates the specified cards from a deck
+      parameters:
+        - $ref: '#/parameters/access_token'
+      responses:
+        '200':
+          description: Deck deleted
+          schema:
+            type: string
+            example: deck deleted
+        '400':
+          description: The JSON body is invalid
+          schema:
+            $ref: '#/definitions/RestErr'
+        '404':
+          description: The specified deck does not exist, invalid deckID
+          schema:
+            $ref: '#/definitions/RestErr'
+        '500':
+          description: Failed to update the cards list
+          schema:
+            $ref: '#/definitions/RestErr'
   /card:
     post:
+      tags:
+        - card
       consumes:
         - application/json
         - multipart/form-data
@@ -219,7 +291,7 @@ paths:
               id:
                 type: string
                 readOnly: true
-        - name: card_image
+        - name: file
           in: formData
           type: file
           description: Card image
@@ -245,6 +317,8 @@ paths:
         required: true
         type: string
     get:
+      tags:
+        - card
       operationId: getCardByID
       description: Full update of the specified deck
       responses:
@@ -261,6 +335,8 @@ paths:
           schema:
             $ref: '#/definitions/RestErr'
     delete:
+      tags:
+        - card
       operationId: deleteCardByID
       description: Deletes the specified deck
       responses:
@@ -278,6 +354,8 @@ paths:
           schema:
             $ref: '#/definitions/RestErr'
     patch:
+      tags:
+        - card
       operationId: patchCardByID
       description: Partial update of the specified card
       responses:
@@ -295,3 +373,25 @@ paths:
           description: Something failed while patching
           schema:
             $ref: '#/definitions/RestErr'
+  /card/pics/{pic_hash}:
+    parameters:
+      - $ref: '#/parameters/access_token'
+      - in: path
+        type: string
+        format: string
+        name: pic_hash
+        required: true
+        description: The relative image path (image) from the Card DTO
+    get:
+      tags:
+        - card
+      produces:
+        - image/png
+        - image/jpeg
+      operationId: GetCardPicture
+      description: Retrieve the picture of a card
+      responses:
+        '200':
+          description: Card picture retrieved correctly
+        '404':
+          description: Card picture not found
