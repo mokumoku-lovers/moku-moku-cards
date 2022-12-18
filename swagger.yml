@@ -291,7 +291,7 @@ paths:
               id:
                 type: string
                 readOnly: true
-        - name: card_image
+        - name: file
           in: formData
           type: file
           description: Card image
