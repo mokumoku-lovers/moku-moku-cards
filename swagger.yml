@@ -358,6 +358,23 @@ paths:
         - card
       operationId: patchCardByID
       description: Partial update of the specified card
+      parameters:
+        - name: patch data
+          in: body
+          required: false
+          schema:
+            allOf:
+              - $ref: '#/definitions/Card'
+            type: object
+            properties:
+              id:
+                type: string
+                readOnly: true
+        - name: file
+          in: formData
+          type: file
+          description: Card image
+          x-mimetype: image/jpeg
       responses:
         '200':
           description: Card successfully updated

@@ -120,6 +120,32 @@ func PartialUpdateCard(c *gin.Context) {
 		restErr := errors.BadRequest("invalid json body")
 		c.JSON(restErr.Status, restErr)
 	}
+
+	// Update card image
+	file, _ := c.FormFile("file")
+	if file != nil {
+		fileType := file.Header.Get("Content-Type")
+		if fileType != "image/jpeg" && fileType != "image/png" {
+			c.JSON(http.StatusBadRequest, errors.BadRequest("file must be of type image"))
+		}
+
+		name := strings.Split(file.Filename, ".")
+		hashedName := sha256.Sum256([]byte(name[0]))
+		hashedNameString := hex.EncodeToString(hashedName[:])
+		card.Image = hashedNameString + "." + name[1]
+
+		//write file to basePath
+		if _, err := os.Stat(BASE_PATH); os.IsNotExist(err) {
+			//create directory
+			os.MkdirAll(BASE_PATH, 0700)
+		}
+		saveErr := c.SaveUploadedFile(file, BASE_PATH+hashedNameString+"."+name[1])
+		if saveErr != nil {
+			c.JSON(http.StatusInternalServerError, errors.InternalServerError("file could not be saved"))
+		}
+
+	}
+
 	result, updateErr := services.PartialUpdateCard(cardID, card)
 	if updateErr != nil {
 		c.JSON(updateErr.Status, updateErr)
