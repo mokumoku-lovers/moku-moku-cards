@@ -116,7 +116,7 @@ func PartialUpdateCard(c *gin.Context) {
 	}
 	cardID := c.Param("cardID")
 	var card cards.Card
-	if err := c.ShouldBindJSON(&card); err != nil {
+	if err := c.ShouldBind(&card); err != nil {
 		restErr := errors.BadRequest("invalid json body")
 		c.JSON(restErr.Status, restErr)
 	}
